@@ -1,0 +1,43 @@
+bombo@hamilton# show | display set | no-more                               
+set version 15.1F5.15
+set system host-name hamilton
+set system root-authentication encrypted-password "$5$1B4ymkCy$pjaskaU9bNWZsNNBpZYNR8KiUPZ8lBJZTNJEnoyDpb7"
+set system login user bombo uid 2000
+set system login user bombo class super-user
+set system login user bombo authentication encrypted-password "$5$rnLEhECP$Lx9FwQpHyBM5Hxt..UMFnFINkfUP7qHNcVLpD5Ckyt2"
+set system services ssh
+set system services netconf ssh
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set interfaces em0 unit 0 family inet address 192.168.14.1/31
+set interfaces em0 unit 0 family iso
+set interfaces em0 unit 0 family mpls
+set interfaces em1 unit 0 family inet address 192.168.45.0/31
+set interfaces em1 unit 0 family iso
+set interfaces em1 unit 0 family mpls
+set interfaces lo0 unit 0 family inet address 10.1.1.4/32
+set interfaces lo0 unit 0 family iso address 49.2222.1234.1234.0004.00
+set protocols rsvp interface lo0.0
+set protocols rsvp interface em1.0
+set protocols rsvp interface em0.0
+set protocols mpls lsp-external-controller pccd
+set protocols mpls label-switched-path r4-r6 to 10.1.1.6
+set protocols mpls label-switched-path r4-r6 no-cspf
+set protocols mpls label-switched-path r4-r7 to 10.1.1.7
+set protocols mpls label-switched-path r4-r7 lsp-external-controller pccd
+set protocols mpls interface em0.0
+set protocols mpls interface em1.0
+set protocols mpls interface lo0.0
+set protocols isis level 2 disable
+set protocols isis interface em0.0 point-to-point
+set protocols isis interface em1.0 point-to-point
+set protocols isis interface lo0.0
+set protocols pcep pce odl local-address 10.1.1.4
+set protocols pcep pce odl destination-ipv4-address 192.168.100.130
+set protocols pcep pce odl destination-port 4189
+set protocols pcep pce odl pce-type active
+set protocols pcep pce odl pce-type stateful
+set protocols pcep pce odl lsp-provisioning
+

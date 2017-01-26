@@ -1,0 +1,53 @@
+bombo@dunedin> ...ion | display set | no-more                               
+set version 15.1F5.15
+set system host-name dunedin
+set system root-authentication encrypted-password "$5$1B4ymkCy$pjaskaU9bNWZsNNBpZYNR8KiUPZ8lBJZTNJEnoyDpb7"
+set system login user bombo uid 2000
+set system login user bombo class super-user
+set system login user bombo authentication encrypted-password "$5$UPn7RnD9$glINXCvkdCefs4o/fsqUN2XhF9p/Q29VAasCXwhzX.6"
+set system services ssh
+set system services netconf ssh
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set interfaces em0 unit 0 family inet address 192.168.26.1/31
+set interfaces em0 unit 0 family iso
+set interfaces em0 unit 0 family mpls
+set interfaces em1 unit 0 family inet address 192.168.67.0/31
+set interfaces em1 unit 0 family iso
+set interfaces em1 unit 0 family mpls
+set interfaces lo0 unit 0 family inet address 10.1.1.6/32
+set interfaces lo0 unit 0 family iso address 49.2222.1234.1234.0006.00
+set routing-options autonomous-system 64123
+set protocols rsvp interface lo0.0
+set protocols rsvp interface em1.0
+set protocols rsvp interface em0.0
+set protocols mpls lsp-external-controller pccd
+set protocols mpls traffic-engineering database import policy ted_to_nlri
+set protocols mpls traffic-engineering database export policy a_all
+set protocols mpls interface em0.0
+set protocols mpls interface em1.0
+set protocols mpls interface lo0.0
+set protocols bgp group core type internal
+set protocols bgp group core local-address 10.1.1.6
+set protocols bgp group core family traffic-engineering unicast
+set protocols bgp group core export ls
+set protocols bgp group core neighbor 10.1.1.2
+set protocols isis level 2 disable
+set protocols isis interface em0.0 point-to-point
+set protocols isis interface em1.0 point-to-point
+set protocols isis interface lo0.0
+set protocols pcep pce odl local-address 10.1.1.6
+set protocols pcep pce odl destination-ipv4-address 192.168.100.130
+set protocols pcep pce odl destination-port 4189
+set protocols pcep pce odl pce-type active
+set protocols pcep pce odl pce-type stateful
+set protocols pcep pce odl lsp-provisioning
+set policy-options policy-statement a_all term 01 from family traffic-engineering
+set policy-options policy-statement a_all term 01 then accept
+set policy-options policy-statement ls term 01 from family traffic-engineering
+set policy-options policy-statement ls term 01 then next-hop self
+set policy-options policy-statement ls term 01 then accept
+set policy-options policy-statement ted_to_nlri term 01 from protocol isis
+set policy-options policy-statement ted_to_nlri term 01 then acce

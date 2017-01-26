@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    <link rel="stylesheet" href="http://abdvl.github.io/src/dist/css/next.css">
+    <script type="text/javascript" src="http://abdvl.github.io/src/dist/js/next.js"></script>
+    <!--link jQuery for Ajax call-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+    </head>
+    <body>
+
+
+
+
+<script type="text/javascript">
+
+(function (nx) {
+    /**
+     * define application
+     */
+    var Shell = nx.define(nx.ui.Application, {
+        methods: {
+            start: function () {
+                //your application main entry
+
+                // initialize a topology
+                var topo = new nx.graphic.Topology({
+                    // set the topology view's with and height
+                    autoLayout: 'true',
+                    adaptive: true,
+                    //width: 1200,
+                    //height: 1200,        
+                    identityKey: 'id', // for mapping node and link
+                    // node config
+                    nodeConfig: {
+                        // label display name from of node's model, could change to 'model.id' to show id
+                        label: 'model.id',
+                        iconType: 'router',
+                        color: 'yellow'
+                    },
+                    // link config
+                    linkConfig: {
+                        // multiple link type is curve, could change to 'parallel' to use parallel link
+                        linkType: 'curve'
+                    },
+                    // show node's icon, could change to false to show dot
+                    showIcon: true,
+                    theme: 'slate'
+                });
+
+    //when topology component ready, make a ajax call to get the topology data and send the data to the topo component
+    topo.on('ready', function () {
+        $.get("/api/topology", function (data) {
+            topo.data(data)
+        })
+    });
+
+                //set data to topology
+               // topo.data(topologyData);
+                //attach topology to document
+topo.attach(this);
+            }
+        }
+    });
+
+    /**
+     * create application instance
+     */
+    var shell = new Shell();
+
+    /**
+     * invoke start method
+     */
+    shell.start();
+})(nx);
+
+</script>
+
+    </body>
+</html>
+

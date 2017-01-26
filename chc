@@ -1,0 +1,78 @@
+set system host-name christchurch
+set system root-authentication encrypted-password "$5$1B4ymkCy$pjaskaU9bNWZsNNBpZYNR8KiUPZ8lBJZTNJEnoyDpb7"
+set system login user bombo uid 2000
+set system login user bombo class super-user
+set system login user bombo authentication encrypted-password "$5$rnLEhECP$Lx9FwQpHyBM5Hxt..UMFnFINkfUP7qHNcVLpD5Ckyt2"
+set system services ssh
+set system services netconf ssh
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set interfaces em0 unit 0 family inet address 192.168.12.1/31
+set interfaces em0 unit 0 family iso
+set interfaces em0 unit 0 family mpls
+set interfaces em1 unit 0 family inet address 192.168.23.0/31
+set interfaces em1 unit 0 family iso
+set interfaces em1 unit 0 family mpls
+set interfaces em2 unit 0 family inet address 192.168.26.0/31
+set interfaces em2 unit 0 family iso
+set interfaces em2 unit 0 family mpls
+set interfaces em3 unit 0 family inet address 192.168.27.0/31
+set interfaces em3 unit 0 family iso
+set interfaces em3 unit 0 family mpls
+set interfaces lo0 unit 0 family inet address 10.1.1.2/32
+set interfaces lo0 unit 0 family iso address 49.2222.1234.1234.0002.00
+set routing-options autonomous-system 64123
+set protocols rsvp interface lo0.0
+set protocols rsvp interface em1.0
+set protocols rsvp interface em2.0
+set protocols rsvp interface em3.0
+set protocols rsvp interface em0.0
+set protocols mpls lsp-external-controller pccd
+set protocols mpls traffic-engineering database import policy ted_to_nlri
+set protocols mpls traffic-engineering database export policy a_all
+set protocols mpls interface em0.0
+set protocols mpls interface em1.0
+set protocols mpls interface em2.0
+set protocols mpls interface em3.0
+set protocols mpls interface lo0.0
+set protocols bgp group controller type internal
+set protocols bgp group controller local-address 10.1.1.2
+set protocols bgp group controller family inet unicast
+set protocols bgp group controller family traffic-engineering unicast
+set protocols bgp group controller cluster 1.1.1.1
+set protocols bgp group controller neighbor 192.168.100.130 export ls
+set protocols bgp group controller neighbor 10.1.1.6
+set protocols bgp group controller neighbor 10.1.1.1
+set protocols isis export leak
+set protocols isis level 1 wide-metrics-only
+set protocols isis level 2 wide-metrics-only
+set protocols isis interface em0.0 point-to-point
+set protocols isis interface em0.0 level 1 disable
+set protocols isis interface em1.0 point-to-point
+set protocols isis interface em1.0 level 1 disable
+set protocols isis interface em2.0 point-to-point
+set protocols isis interface em2.0 level 2 disable
+set protocols isis interface em3.0 point-to-point
+set protocols isis interface em3.0 level 2 disable
+set protocols isis interface lo0.0 level 1 disable
+set protocols pcep pce odl local-address 10.1.1.2
+set protocols pcep pce odl destination-ipv4-address 192.168.100.130
+set protocols pcep pce odl destination-port 4189
+set protocols pcep pce odl pce-type active
+set protocols pcep pce odl pce-type stateful
+set protocols pcep pce odl lsp-provisioning
+set policy-options policy-statement a_all term 01 from family traffic-engineering
+set policy-options policy-statement a_all term 01 then accept
+set policy-options policy-statement leak term 01 from route-filter 192.168.100.0/24 exact
+set policy-options policy-statement leak term 01 from route-filter 10.1.1.2/32 exact
+set policy-options policy-statement leak term 01 to level 1
+set policy-options policy-statement leak term 01 then accept
+set policy-options policy-statement ls term 01 from family traffic-engineering
+set policy-options policy-statement ls term 01 then next-hop self
+set policy-options policy-statement ls term 01 then accept
+set policy-options policy-statement ted_to_nlri term 01 from protocol isis
+set policy-options policy-statement ted_to_nlri term 01 from level 2
+set policy-options policy-statement ted_to_nlri term 01 then accept
+set policy-options policy-statement ted_to_nlri term 02 then reject
